@@ -6,6 +6,8 @@ async function loadKlarnaSdk() {
     'https://js.klarna.com/web-sdk/v2/klarna.mjs'
   );
 
+  // MID: K332722
+  // where: playground
   return await KlarnaSDK({
     clientId:
       'klarna_test_client_TjMjOUlseXVvS0N6ZllLI3VteEtzWmQ3MHV0b0I_U0ssMDA3MGRjYmItNmM0Mi00MTQzLWIwYmItYjIzZDA2MDRiZWI0LDEseUtkc084TXZ1SlJtRGxXcXFMdzB2SzJURzBMMENnWUFTQTFXMWdCb3dFMD0',
