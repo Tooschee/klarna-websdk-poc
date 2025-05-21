@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="https://glitch.com/favicon.ico" />
+
+    <title>Klarna SDK iframe</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+        background: transparent;
+      }
+    </style>
+
+    <script type="text/javascript">
+      /**
+       * Enable following code to emulate blocked popup behavior
+       */
+      //window.open = () => null;
+    </script>
+  </head>
+
+  <body>
+    <!-- This page loads the Klarna SDK and renders Klarna button. -->
+    <div id="klarna-payment-button-container"></div>
+
+    <script type="module">
+      let mode = 'POPUP';
+      let popupActivated = false;
+      const paymentData = { currency: 'EUR', paymentAmount: 1000 };
+
+      /**
+       * Klarna SDK stuffs
+       */
+      const { KlarnaSDK } = await import(
+        'https://js.klarna.com/web-sdk/v1/klarna.mjs'
+      );
+
+      const Klarna = await KlarnaSDK({
+        clientId:
+          'klarna_test_client_KnMlbGMzY3FJZWkyWEl3WlBvV2hkam5tTSVIVkllR1QsMjBmYWJlYTAtZWI0Ni00NGNjLTk2N2ItMmFlYjAxMzI3MjJiLDEsT21CTFZGbEZzYzdCWFZZYXBrSmRIZVk5K2NsU3l6d2YzaGJTcW9JTmZZVT0',
+      });
+
+      Klarna.Payment.button()
+        .mount('#klarna-payment-button-container')
+        .on('click', async () => {
+          try {
+            await Klarna.Payment.request().initiate(paymentData, {
+              interactionMode: 'POPUP',
+            });
+            popupActivated = true;
+          } catch (e) {}
+
+          // communicate to parent window to render overlay
+        });
+
+      async function initiateKlarnaPaymentFlowWithFallback() {
+        try {
+          await Klarna.Payment.request().initiate(paymentData, {
+            interactionMode: 'POPUP',
+          });
+        } catch (error) {
+          console.log('errr', error);
+          if (error?.errorMessage === 'Failed to open an interaction') {
+            Klarna.Payment.request().initiate(paymentData, {
+              interactionMode: 'IFRAME',
+              hideOverlay: true,
+            });
+          }
+          mode = 'IFRAME';
+          // communicate to parent window to render overlay
+          console.log('popupActivated', popupActivated, mode);
+          if (!popupActivated && mode === 'IFRAME') {
+            console.log('working');
+          }
+        }
+      }
+
+      Klarna.Payment.on('update', (paymentRequest) => {
+        if (paymentRequest.stateReason === 'PURCHASE_FLOW_ABORTED') {
+        }
+
+        if (paymentRequest.state === 'PENDING_CONFIRMATION') {
+          console.log('Payment completed!!!', paymentRequest);
+        }
+      });
+    </script>
+  </body>
+</html>
