@@ -41,20 +41,34 @@
           <div class="content">
             <h3>How to launch in Glitch tutorial</h3>
             <ol>
-              <li>Create new glitch - select <kbd>import from github</kbd></li>
-              <li>paste url <kbd>https://github.com/Tooschee/klarna-websdk-poc</kbd></li>
-              <li>depending which <kbd>complicated</kbd> example we want to launch, <kbd>edit the package.json</kbd>
+              <li>Create new glitch - select <code>import from github</code></li>
+              <li>paste url <code>https://github.com/Tooschee/klarna-websdk-poc</code></li>
+              <li>depending which <code>complicated</code> example we want to launch, <code>edit the package.json</code>
               </li>
             </ol>
 
             <h3>Potential issues</h3>
             <ol>
-              <li>to <kbd>complicated</kbd> sets working with github pages, a backend server needed(owned by us, public,
+              <li>to <code>complicated</code> sets working with github pages, a backend server needed(owned by us,
+                public,
                 wihtout CORS problems?)</li>
               <li>needed to add every glitch to MID (or create a proper wildcard?)</li>
               <li>tutorial needed on how to switch between complicated sets (or maybe possible to do it diferrent in
                 glitch)</li>
             </ol>
+
+            <h3>Potential upgrades</h3>
+            <ol>
+              <li>use <code>next.js</code> or any other framework - create this project as a static builder, this gives
+                possibility:</li>
+              <ul>
+                <li>wrap things in templates(<code>complicated-1</code> can have diferrent template than
+                  <code>complicated-2</code> )</li>
+                <li>refer to same names/variables in many places at once </li>
+                <li>more control of bulding process?</li>
+              </ul>
+            </ol>
+
           </div>
         </div>
       </div>
