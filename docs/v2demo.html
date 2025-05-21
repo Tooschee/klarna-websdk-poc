@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo - Payment flows with V2 APIs</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@tailwindcss/typography@0.4.1/dist/typography.min.css"
+    />
+  </head>
+
+  <body x-data="{ amount: 1000, preventRedirect: true }">
+    <div id="test-container" class="container px-4 lg:mx-auto py-10">
+      <h1 class="text-3xl font-medium">Web SDK v2 DEMO</h1>
+
+      <div class="flex flex-col md:flex-row md:gap-x-8">
+        <div class="mt-10 grid grid-cols-1 gap-6 max-w-md flex-1">
+          <div>
+            <label for="amount" class="block text-sm font-medium leading-6 text-gray-900"
+              >Payment amount</label
+            >
+            <div class="mt-2">
+              <input
+                type="text"
+                name="amount"
+                id="amount"
+                class="block w-full rounded-md border-0 py-1.5 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                placeholder="1000"
+                x-model="amount"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label for="currency" class="block text-sm font-medium leading-6 text-gray-900"
+              >Currency</label
+            >
+            <div class="mt-2">
+              <input
+                type="text"
+                name="currency"
+                id="currency"
+                class="block w-full rounded-md border-0 py-1.5 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                placeholder="EUR"
+                disabled
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col mt-10 gap-6 items-start flex-1">
+          <div>
+            <h2 class="text-sm font-medium text-grey-600 mb-2">REDIRECT mode</h2>
+            <div id="redirect_button"></div>
+          </div>
+          <div class="flex flex-col">
+            <h2 class="text-sm font-medium text-grey-600 mb-2">ON_PAGE mode</h2>
+            <div id="on_page_button"></div>
+            <div class="flex items-center self-end mr-2">
+              <input
+                x-model="preventRedirect"
+                id="preventRedirect-checkbox"
+                type="checkbox"
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+              />
+              <label
+                for="preventRedirect-checkbox"
+                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >Prevent redirect</label
+              >
+            </div>
+          </div>
+          <div class="flex flex-col">
+            <h2 class="text-sm font-medium text-grey-600 mb-2">ON_PAGE noOnClick</h2>
+            <div id="on_page_button_no_click"></div>
+          </div>
+        </div>
+      </div>
+
+      <section x-data="{ tab: 'DEVICE_BEST' }">
+        <h3 class="text-xl font-medium mt-10">Code examples</h3>
+
+        <article class="prose mt-2 max-w-none">
+          <pre>
+            klarna.Payment.on('complete', (paymentRequest) => {
+              // Perform integrator backend operations to use paymentRequest.stateContext.paymentToken
+              <span x-show="preventRedirect">return false</span>
+            })
+            klarna.Payment.on('abort', (paymentRequest) => {
+              // Take appropriate actions when customer aborts the purchase flow
+            })
+          </pre>
+        </article>
+
+        <div
+          class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700 mt-2"
+        >
+          <ul class="flex flex-wrap -mb-px">
+            <li class="me-2">
+              <button
+                class="inline-block px-4 py-2 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300"
+                :class="{'text-blue-600 border-blue-500 hover:text-blue-600 hover:border-blue-500': tab === 'DEVICE_BEST'}"
+                @click="tab = 'DEVICE_BEST'"
+              >
+                DEVICE_BEST
+              </button>
+            </li>
+            <li class="me-2">
+              <button
+                class="inline-block px-4 py-2 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300"
+                :class="{'text-blue-600 border-blue-500 hover:text-blue-600 hover:border-blue-500': tab === 'ON_PAGE'}"
+                @click="tab = 'ON_PAGE'"
+              >
+                ON_PAGE
+              </button>
+            </li>
+            <li class="me-2">
+              <button
+                class="inline-block px-4 py-2 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300"
+                :class="{'text-blue-600 border-blue-500 hover:text-blue-600 hover:border-blue-500': tab === 'REDIRECT'}"
+                @click="tab = 'REDIRECT'"
+              >
+                REDIRECT
+              </button>
+            </li>
+
+            <li class="me-2">
+              <button
+                class="inline-block px-4 py-2 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300"
+                :class="{'text-blue-600 border-blue-500 hover:text-blue-600 hover:border-blue-500': tab === 'Fetch'}"
+                @click="tab = 'Fetch'"
+              >
+                Fetch
+              </button>
+            </li>
+            <li class="me-2">
+              <button
+                class="inline-block px-4 py-2 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300"
+                :class="{'text-blue-600 border-blue-500 hover:text-blue-600 hover:border-blue-500': tab === 'Cancel'}"
+                @click="tab = 'Cancel'"
+              >
+                Cancel
+              </button>
+            </li>
+            <li class="me-2">
+              <button
+                class="inline-block px-4 py-2 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300"
+                :class="{'text-blue-600 border-blue-500 hover:text-blue-600 hover:border-blue-500': tab === 'CSS'}"
+                @click="tab = 'CSS'"
+              >
+                Shopping Session
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <article x-show="tab === 'DEVICE_BEST'" class="prose mt-2 max-w-none">
+          <pre>
+            import { KlarnaSDK } from './klarna.mjs'
+
+            const klarna = await KlarnaSDK({
+              clientId:
+                'klarna_test_client_VS8lWCU4LUFxYjNVQ1QpP1hQT2l1KEVTRnVDcTUtcXQsNGVjN2NiZTEtMmU0OC00YjJkLTlkYTItN2RjMGZkZDBlNGIxLDEsdVo1MG8vM0hDaEoydkxTaVp5blhXYy9vekdPMThDV0tMdXNFbFcyc3VpND0',
+            })
+
+            klarna.Payment.button().mount('#container').on('click', async () => {
+              await klarna.Payment.initiate(
+                () => ({
+                  currency: 'EUR',
+                  amount: <span x-text="amount"></span>,
+                }),
+              )
+            })
+        </pre>
+        </article>
+
+        <article x-show="tab === 'ON_PAGE'" class="prose mt-2 max-w-none">
+          <pre>
+            import { KlarnaSDK } from './klarna.mjs'
+
+            const klarna = await KlarnaSDK({
+              clientId:
+                'klarna_test_client_VS8lWCU4LUFxYjNVQ1QpP1hQT2l1KEVTRnVDcTUtcXQsNGVjN2NiZTEtMmU0OC00YjJkLTlkYTItN2RjMGZkZDBlNGIxLDEsdVo1MG8vM0hDaEoydkxTaVp5blhXYy9vekdPMThDV0tMdXNFbFcyc3VpND0',
+            })
+
+            klarna.Payment.button().mount('#container').on('click', async () => {
+              await klarna.Payment.initiate(
+                () => ({
+                  currency: 'EUR',
+                  amount: <span x-text="amount"></span>,
+                  customerInteractionConfig: {
+                    returnUrl: 'https://example.com?id={klarna.paymentRequest.id}&token={klarna.paymentRequest.payment_token}'
+                  }
+                }),
+                {
+                  initiationMode: "ON_PAGE",
+                }
+              )
+            })
+        </pre>
+        </article>
+
+        <article x-show="tab === 'REDIRECT'" class="prose mt-2 max-w-none">
+          <pre>
+            import { KlarnaSDK } from './klarna.mjs'
+
+            const klarna = await KlarnaSDK({
+              clientId:
+                'klarna_test_client_VS8lWCU4LUFxYjNVQ1QpP1hQT2l1KEVTRnVDcTUtcXQsNGVjN2NiZTEtMmU0OC00YjJkLTlkYTItN2RjMGZkZDBlNGIxLDEsdVo1MG8vM0hDaEoydkxTaVp5blhXYy9vekdPMThDV0tMdXNFbFcyc3VpND0',
+            })
+
+            klarna.Payment.button().mount('#container').on('click', async () => {
+              await klarna.Payment.initiate(
+                () => ({
+                  currency: 'EUR',
+                  amount: <span x-text="amount"></span>,
+                  customerInteractionConfig: {
+                    returnUrl: 'https://example.com?id={klarna.paymentRequest.id}&token={klarna.paymentRequest.payment_token}'
+                  }
+                }),
+                {
+                  initiationMode: "REDIRECT",
+                }
+              )
+            })
+          </pre>
+        </article>
+
+        <article x-show="tab === 'Fetch'" class="prose mt-2 max-w-none">
+          <div class="flex flex-col">
+            <h2 class="text-sm font-medium text-grey-600 mb-2">Fetch payment request</h2>
+            <p class="text-xs mb-4">Fetch the latest information of the payment request</p>
+            <input
+              type="text"
+              id="fetch_input"
+              class="max-w-md p-3 border-2"
+              placeholder="Enter payment request id"
+            />
+            <button
+              id="fetch_button"
+              class="max-w-md bg-green-600 text-white p-3 font-bold"
+              onclick="fetchPaymentRequest()"
+            >
+              Fetch Payment Request
+            </button>
+            <pre id="fetch_content"></pre>
+          </div>
+        </article>
+
+        <article x-show="tab === 'Cancel'" class="prose mt-2 max-w-none">
+          <div class="flex flex-col">
+            <h2 class="text-sm font-medium text-grey-600 mb-2">Cancel payment request</h2>
+            <p class="text-xs mb-4">Cancel a payment request by inputting the payment request id</p>
+            <input
+              type="text"
+              id="cancel_input"
+              class="max-w-md p-3 border-2"
+              placeholder="Enter payment request id"
+            />
+            <button
+              id="cancel-button"
+              class="max-w-md bg-red-400 text-white p-3 font-bold"
+              onclick="cancelPaymentRequest()"
+            >
+              Cancel Payment request
+            </button>
+          </div>
+        </article>
+        <article x-show="tab === 'CSS'" class="prose mt-2">
+          <h2 class="text-sm font-medium text-grey-600 mb-2">Shopping Session Service</h2>
+          <p class="text-xs mb-4">
+            This will create new shopping session resulting shoppingSessionId, which can be used
+            later for GET/PATCH calls
+          </p>
+        </article>
+      </section>
+    </div>
+
+    <script type="module">
+      import { KlarnaSDK } from './klarna.mjs'
+
+      let inputValue = '1000'
+      window.onload = () => {
+        const inputElement = document.getElementById('amount')
+        inputElement.addEventListener('change', (e) => {
+          const value = e.target.value
+          if (value) inputValue = value
+        })
+      }
+
+      const klarna = await KlarnaSDK({
+        clientId:
+          'klarna_test_client_VS8lWCU4LUFxYjNVQ1QpP1hQT2l1KEVTRnVDcTUtcXQsNGVjN2NiZTEtMmU0OC00YjJkLTlkYTItN2RjMGZkZDBlNGIxLDEsdVo1MG8vM0hDaEoydkxTaVp5blhXYy9vekdPMThDV0tMdXNFbFcyc3VpND0',
+        version: new URLSearchParams(window.location.search).get('version') || undefined,
+        preloadProducts: ['Payment'],
+      })
+
+      window.Klarna = klarna
+
+      klarna.Payment.on('complete', (paymentRequest) => {
+        onPageButton.toggleState('loading', false)
+        onPageButton.toggleState('disabled', false)
+        console.log('Request pending confirmation: ', paymentRequest)
+
+        if (document.getElementById('preventRedirect-checkbox')?.checked) {
+          return false
+        }
+      })
+      klarna.Payment.on('abort', (paymentRequest) => {
+        onPageButton.toggleState('loading', false)
+        onPageButton.toggleState('disabled', false)
+        console.log('Request aborted: ', paymentRequest)
+      })
+
+      /**
+       * ON_PAGE
+       */
+      const onPageButton = await klarna.Payment.button()
+        .on('click', async () => {
+          onPageButton.toggleState('loading', true)
+          onPageButton.toggleState('disabled', true)
+
+          try {
+            await klarna.Payment.initiate(
+              () => ({
+                currency: 'EUR',
+                amount: Number(inputValue !== '' ? inputValue : 1000),
+                customerInteractionConfig: {
+                  returnUrl:
+                    'https://example.com?id={klarna.paymentRequest.id}&token={klarna.paymentRequest.payment_token}',
+                },
+              }),
+              {
+                initiationMode: 'ON_PAGE',
+              }
+            )
+          } catch (error) {
+            console.log('Demo page - payment initiation error: ', error)
+          }
+        })
+        .mount('#on_page_button')
+
+      /**
+       * ON_PAGE no click
+       */
+      const initiateButton = klarna.Payment.button({
+        intents: ['PAY'],
+        initiate: () => ({
+          currency: 'EUR',
+          amount: Number(inputValue !== '' ? inputValue : 1000),
+          customerInteractionConfig: {
+            returnUrl:
+              'https://example.com?id={klarna.paymentRequest.id}&token={klarna.paymentRequest.payment_token}',
+          },
+        }),
+      })
+        .mount('#on_page_button_no_click')
+        .on('click', async () => {
+          initiateButton.toggleState('loading', true)
+          initiateButton.toggleState('disabled', true)
+          console.log('Button automatically handles payment request with initiate config')
+        })
+
+      /**
+       * REDIRECT
+       */
+      const redirectButton = klarna.Payment.button({
+        id: 'redirect-button',
+        theme: 'dark',
+      })
+        .on('click', async () => {
+          try {
+            redirectButton.toggleState('loading', true)
+
+            await klarna.Payment.initiate(
+              () => ({
+                currency: 'EUR',
+                amount: Number(inputValue !== '' ? inputValue : 1000),
+                customerInteractionConfig: {
+                  returnUrl:
+                    'https://example.com?id={klarna.paymentRequest.id}&token={klarna.paymentRequest.payment_token}',
+                },
+              }),
+              {
+                initiationMode: 'REDIRECT',
+              }
+            )
+          } catch (error) {
+            console.log('Demo page - payment initiation error: ', error)
+          }
+        })
+        .mount('#redirect_button')
+
+      /**
+       * Fetch
+       */
+      window.fetchPaymentRequest = async () => {
+        const paymentRequestId = document.getElementById('fetch_input').value
+        const result = await klarna.Payment.fetch(paymentRequestId).catch((e) => e.message)
+        console.log('result: ', result)
+        const state = result.state
+        console.log('state: ', state)
+        const stateContext = result.stateContext
+        console.log('stateContext: ', stateContext)
+
+        document.getElementById('fetch_content').textContent =
+          `Fetch response: \n${JSON.stringify(result, null, 2)} \n\n` +
+          `Value of paymentRequest.state:\n${state} \n\n` +
+          `Value of paymentRequest.stateContext:\n${JSON.stringify(stateContext, null, 2)}`
+      }
+      /**
+       * Cancel
+       */
+      window.cancelPaymentRequest = async () => {
+        const paymentRequestId = document.getElementById('cancel_input').value
+        const result = await klarna.Payment.request().cancel(paymentRequestId)
+        console.log('result: ', result)
+      }
+    </script>
+  </body>
+</html>
