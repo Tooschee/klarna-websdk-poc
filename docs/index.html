@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
   <title>Index</title>
 </head>
+
 <body>
   <section class="section">
     <div class="container">
@@ -19,33 +21,41 @@
       <div class="columns">
         <div class="column">
           <div class="content">
-          <h2>simple examples</h2>
-          <ul>
-            <li><a href="/temp-1.html">temp-1.html</a></li>
-            <li><a href="/v2demo.html">v2demo.html</a></li>
-          </ul>
-        </div>
+            <h2>simple examples</h2>
+            <ul>
+              <li><a href="/docs/temp-1.html">temp-1.html</a></li>
+              <li><a href="/docs/v2demo.html">v2demo.html</a></li>
+            </ul>
+          </div>
         </div>
         <div class="column">
           <div class="content">
-          <h2>Glitches examples</h2>
-          <li><a href="/v2demo.html">v2demo.html - sample A</a></li>
-          <li><a href="/v2demo.html">v2demo.html - sample B</a></li>
-        </div>
+            <h2>Glitches examples</h2>
+            <li><a href="/docs/complicated-1/index.html">v2demo.html - sample A</a></li>
+            <li><a href="/docs/complicated-2/index.html">v2demo.html - sample B</a></li>
+          </div>
         </div>
       </div>
       <div class="columns">
         <div class="column">
           <div class="content">
-          <h3>How to launch in Glitch tutorial</h3>
+            <h3>How to launch in Glitch tutorial</h3>
+            <ol>
+              <li>Create new glitch - select <kbd>import from github</kbd></li>
+              <li>paste url <kbd>https://github.com/Tooschee/klarna-websdk-poc</kbd></li>
+              <li>depending which <kbd>complicated</kbd> example we want to launch, <kbd>edit the package.json</kbd></li>
+            </ol>
+          </div>
+          <h3>Potential issues</h3>
           <ol>
-            <li>Create new glitch - select <kbd>import from github</kbd></li>
-            <li>paste url <kbd>https://github.com/Tooschee/klarna-websdk-poc</kbd></li>
+            <li>to <kbd>complicated</kbd> sets working with github pages, a backend server needed(owned by us, public, wihtout CORS problems?)</li>
+            <li>needed to add every glitch to MID (or create a proper wildcard?)</li>
+            <li>tutorial needed on how to switch between complicated sets (or maybe possible to do it diferrent in glitch)</li>
           </ol>
-        </div>
         </div>
       </div>
 
     </div>
 </body>
+
 </html>
