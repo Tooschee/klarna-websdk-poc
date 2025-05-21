@@ -72,15 +72,12 @@
           if (error?.errorMessage === 'Failed to open an interaction') {
             Klarna.Payment.request().initiate(paymentData, {
               interactionMode: 'IFRAME',
-              hideOverlay: true,
+              hideOverlay: flase,
             });
           }
           mode = 'IFRAME';
           // communicate to parent window to render overlay
           console.log('popupActivated', popupActivated, mode);
-          if (!popupActivated && mode === 'IFRAME') {
-            console.log('working');
-          }
         }
       }
 
@@ -89,7 +86,7 @@
         }
 
         if (paymentRequest.state === 'PENDING_CONFIRMATION') {
-          console.log('Payment completed!!!', paymentRequest);
+          console.log('-----Payment completed-----', paymentRequest);
         }
       });
     </script>
