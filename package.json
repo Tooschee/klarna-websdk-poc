@@ -1,7 +1,7 @@
 {
   "name": "complicated-1",
   "version": "0.1.0",
-  "description": "A simple Node app built on fastify, instantly up and running. Built to be remixed on Glitch.com.",
+  "description": "Proof of Concept - klarna WEBSDK",
   "main": "server.js",
   "scripts": {
     "start": "node docs/complicated-1/server.js"
